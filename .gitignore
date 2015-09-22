@@ -1,0 +1,8 @@
+dev/*.pyc
+dev/.*
+dev/*.exe
+*/__pycache__
+testing/
+*.pyc
+*.exe
+*.py~
