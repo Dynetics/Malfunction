@@ -50,7 +50,7 @@ def get_data(binary):
     pma = int(output.pop(0), 16)
     flist = []
     for line in output:
-        flist.append(line.decode("utf-8").split("  "))
+        flist.append(line.decode("utf-8").split())
 
     offset = int(flist[0][0], 16) - pma
 
