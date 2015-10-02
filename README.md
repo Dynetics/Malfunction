@@ -3,7 +3,8 @@
 Malfunction is a set of tools for cataloging and comparing malware at a function level. Uses Radare2 internally for finding function locations. Written in Python 3.
 Currently only works on Linux based systems.
 
-Jeramy Lochner and Matthew Rogers will be giving a presentation on Malfunction for DerbyCon on 9/25/2015 in Louisville, KY.
+Jeramy Lochner and Matthew Rogers gave a presentation on Malfunction for DerbyCon on 9/25/2015 in Louisville, KY.
+http://www.irongeek.com/i.php?page=videos/derbycon5/stable08-malfunctions-functions-automated-static-malware-analysis-using-function-level-signatures-matthew-rogers-jeramy-lochner
 
 ## Installation
 
