@@ -29,11 +29,16 @@ import psutil
 import subprocess
 import sys
 import apsw
-from progressbar import ProgressBar, Bar, Percentage, ETA
 import ssdeep
 import gradient
 import malget
 from mallearn import add_sigs
+
+try:
+    import progressbar
+except ImportError:
+    progressbar = None
+    print("progressbar not installed, continuing")
 
 # binary_hash always refers to the MD5 hash of a file.
 # hash_list always refers to the list of fuzzy hashes of a file.
@@ -131,11 +136,17 @@ def process_sigs(cursor, sig_list, bin_list):
 
     score_list = []
 
-    cursor.execute("SELECT count(hash) FROM functions")
-    database_size = int(cursor.fetchone()[0])
-    widgets = [" ", Bar(marker="#"), " ", Percentage(), " ", ETA()]
-    pbar = ProgressBar(widgets=widgets,
-                       maxval=database_size*len(sig_list)).start()
+    maxval = 0
+    for row in bin_list:
+        cursor.execute("SELECT count(hash) FROM functions WHERE binaryid=?", (row[0],))
+        maxval += int(cursor.fetchone()[0])
+    maxval = maxval*len(sig_list)
+    if progressbar:
+        widgets = [" ", progressbar.Bar(marker="#"), " ", progressbar.Percentage(), " ", progressbar.ETA()]
+        pbar = progressbar.ProgressBar(widgets=widgets,
+                           maxval=maxval).start()
+    else:
+        pbar = None
     i = 0
     for row in bin_list:
         function_score_list = []
@@ -154,13 +165,16 @@ def process_sigs(cursor, sig_list, bin_list):
                     highest_score = strength
 
                 i += 1
-                pbar.update(i)
+                if pbar:
+                    pbar.update(i)
+                elif i % 10000 == 0 or i == maxval:
+                    print("%d / %d Done" % (i, maxval))
 
             function_score_list.append(highest_score)
 
         score_list.append(function_score_list)
-
-    pbar.finish()
+    if pbar:
+        pbar.finish()
     return score_list
 
 
@@ -206,22 +220,24 @@ def output(cursor, by_binary_list, whitelist_avg, blacklist_avg):
         cursor.execute("SELECT author,filenames,comment FROM "
                        "binaries WHERE binaryID=?", (binary_id, ))
         binary_entry = cursor.fetchone()
-        if binary_entry[0] not in possible_authors:
+        if binary_entry[0] not in possible_authors and binary_entry[0]:
             possible_authors.append(binary_entry[0])
-        if binary_entry[1] not in possible_filenames:
+        if binary_entry[1] not in possible_filenames and binary_entry[1]:
             possible_filenames.append(binary_entry[1])
-        if binary_entry[2] not in comments:
+        if binary_entry[2] not in comments and binary_entry[2]:
             comments.append(binary_entry[2])
     if possible_authors:
         print("***Possible Authors of this binary***")
         for author in possible_authors:
             print(author, end=" - ")
+    print("\n")
     if possible_filenames:
-        print("\n***Possible Filenames this binary could go by***")
+        print("***Possible Filenames this binary could go by***")
         for filename in possible_filenames:
             print(filename, end=" - ")
+    print("\n")
     if comments:
-        print("\n***Comments about similar binaries***")
+        print("***Comments about similar binaries***")
         for comment in comments:
             print(comment)
 

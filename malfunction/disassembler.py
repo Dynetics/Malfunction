@@ -42,7 +42,7 @@ def get_data(binary):
     # Open the binary
     f = open(binary, "rb")
 
-    cmd = "r2 " + binary + " -c af -c ?p -c afl -q"
+    cmd = "r2 '" + binary + "' -c af -c ?p -c afl -q"
     DEVNULL = open(os.devnull, "w")
     output = subprocess.check_output(cmd, shell=True, stderr=DEVNULL)
     output = output.splitlines()
