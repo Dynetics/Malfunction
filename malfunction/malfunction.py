@@ -57,7 +57,7 @@ def argparse_setup():
                         to use, Default='malfunction.db' 
     -a all              -- Compare to all files, not just same type"""
 
-    parser = argparse.ArgumentParser(prog="python malfunction.py")
+    parser = argparse.ArgumentParser(prog="python3 malfunction.py")
     parser.add_argument("PATH", help="Binary or directory of binaries to run "
                                      "comparisions against")
     parser.add_argument("-d", "--debug", action="store_true",
@@ -90,8 +90,9 @@ def prepare_database(leave_db, database=None):
 
     conn = apsw.Connection(database)
     cursor = conn.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS functions"
-                   "(hash TEXT, binaryID TEXT)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS functions(hash TEXT,binaryID"
+                   " TEXT,FOREIGN KEY(binaryID) REFERENCES "
+                   "binaries(binaryID))")
     cursor.execute("CREATE TABLE IF NOT EXISTS binaries(binaryID TEXT, "
                    "author TEXT, filenames TEXT, comment TEXT, "
                    "trustlevel TEXT, filetype TEXT);")

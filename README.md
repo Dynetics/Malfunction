@@ -26,9 +26,9 @@ $ wget https://github.com/rogerbinns/apsw/releases/download/3.8.10.1-r1/apsw-3.8
 $ unzip apsw-3.8.10.1-r1.zip
 $ cd apsw-3.8.10.1-r1.zip
 $ python3 setup.py install
-Install the latest version of progress-python3
+Install the latest version of progress-python3 (OPTIONAL)
 $ git clone https://github.com/coagulant/progressbar-python3.git
-$ cd progress
+$ cd progressbar-python3
 $ python3 setup.py install
 Install the latest version of radare2
 $ git clone https://github.com/radare/radare2.git

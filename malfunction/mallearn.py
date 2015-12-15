@@ -46,7 +46,7 @@ def argparse_setup():
      -s sigsOnly         -- Skip disassembly and add sig file to database
      -D database         -- Change the path of the database"""
 
-    parser = argparse.ArgumentParser(prog="./mal-learn")
+    parser = argparse.ArgumentParser(prog="python3 mal-learn")
     parser.add_argument("-a", "--author", type=str, default="unknown",
                         help="The Author of the given binary")
     parser.add_argument("PATH", help="Path to the target binary or binaries")

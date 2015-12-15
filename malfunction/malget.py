@@ -36,7 +36,7 @@ def argparse_setup():
     -o output       -- output file for hashes
     -u unpack       -- automatic unpacking"""
 
-    parser = argparse.ArgumentParser(prog="python malget.py")
+    parser = argparse.ArgumentParser(prog="python3 malget.py")
     parser.add_argument("PATH", help="Path to the binary or binaries")
     parser.add_argument("-o", "--output", type=str, help="output file for "
                         "signatures")
